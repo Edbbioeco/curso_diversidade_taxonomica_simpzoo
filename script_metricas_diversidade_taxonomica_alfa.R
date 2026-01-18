@@ -4,6 +4,8 @@ library(tidyverse)
 
 library(vegan)
 
+library(scales)
+
 # Dados ----
 
 ## Importando ----
@@ -49,6 +51,7 @@ whitakker |>
   geom_line(linewidth = 1,
             color = "black") +
   facet_wrap(~Comunidade, scales = "free") +
+  scale_y_continuous(labels = scales::label_number(accuracy = 1)) +
   theme_classic()
 
 ggsave(filename = "diversidade_taxonomica_whittaker.png",
