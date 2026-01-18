@@ -192,3 +192,9 @@ ggsave(filename = "rarefacao_jack1.png",
        width = 12)
 
 # Extrapolação baseada em bootstraping ----
+
+## Calculando ----
+
+## Tratando ----
+
+## Gráfico ----
