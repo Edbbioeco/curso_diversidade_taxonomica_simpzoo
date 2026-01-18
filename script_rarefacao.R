@@ -193,8 +193,30 @@ ggsave(filename = "rarefacao_jack1.png",
 
 # Extrapolação baseada em bootstraping ----
 
-## Calculando ----
+## Baseado em individuos ----
 
-## Tratando ----
+### Calculando ----
 
-## Gráfico ----
+int_ext <- com |>
+  colSums() |>
+  iNEXT::iNEXT(q = 0,
+               datatype = "abundance",
+               endpoint = 450)
+
+int_ext
+
+### Gráfico ----
+
+### 1ª extrapolação ----
+
+int_ext |>
+  iNEXT::ggiNEXT(type = 1) +
+  scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
+  scale_colour_manual(values = "orange") +
+  scale_fill_manual(values = "orange") +
+  labs(x = "Número de indivíduos", y = " Riqueza de espécies") +
+  theme_classic()
+
+ggsave(filename = "rarefacao_int_ext_ind.png",
+       height = 10,
+       width = 12)
