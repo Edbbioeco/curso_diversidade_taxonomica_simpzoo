@@ -71,6 +71,10 @@ chao1_trat |>
   scale_x_continuous(breaks = seq(0, 14, 2)) +
   theme_classic()
 
+ggsave(filename = "rarefacao_chao1.png",
+       height = 10,
+       width = 12)
+
 # Rarefação baseada em abundância ----
 
 ## Chao 2 ----
