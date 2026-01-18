@@ -197,11 +197,40 @@ ggsave(filename = "rarefacao_jack1.png",
 
 ### Calculando ----
 
-int_ext <- com |>
+int_ext_indi <- com |>
   colSums() |>
   iNEXT::iNEXT(q = 0,
                datatype = "abundance",
                endpoint = 450)
+
+int_ext_indi
+
+### Gráfico ----
+
+### 1ª extrapolação ----
+
+int_ext_indi |>
+  iNEXT::ggiNEXT(type = 1) +
+  scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
+  scale_colour_manual(values = "orange") +
+  scale_fill_manual(values = "orange") +
+  labs(x = "Número de indivíduos", y = " Riqueza de espécies") +
+  theme_classic()
+
+ggsave(filename = "rarefacao_int_ext_ind.png",
+       height = 10,
+       width = 12)
+
+## Baseado em unidades amostrais ----
+
+### Calculando ----
+
+int_ext <- com |>
+  t() |>
+  as.incfreq() |>
+  iNEXT::iNEXT(q = 0,
+               datatype = "incidence_freq",
+               endpoint = 21)
 
 int_ext
 
