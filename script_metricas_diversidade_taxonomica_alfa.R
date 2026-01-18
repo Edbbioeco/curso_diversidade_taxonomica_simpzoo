@@ -50,9 +50,8 @@ whitakker |>
   ggplot(aes(Rank, Abundancia)) +
   geom_line(linewidth = 1,
             color = "black") +
-  facet_wrap(~Comunidade, scales = "free") +
+  facet_wrap(~Comunidade, scales = "free_x") +
   scale_x_continuous(breaks = scales::breaks_width(1)) +
-  scale_y_continuous(breaks = scales::breaks_width(1)) +
   theme_classic()
 
 ggsave(filename = "diversidade_taxonomica_whittaker.png",
