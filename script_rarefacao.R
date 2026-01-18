@@ -214,7 +214,7 @@ int_ext_indi |>
   scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
   scale_colour_manual(values = "orange") +
   scale_fill_manual(values = "orange") +
-  labs(x = "Número de indivíduos", y = " Riqueza de espécies") +
+  labs(x = "Número de indivíduos", y = "Riqueza") +
   theme_classic()
 
 ggsave(filename = "rarefacao_int_ext_ind.png",
@@ -225,27 +225,27 @@ ggsave(filename = "rarefacao_int_ext_ind.png",
 
 ### Calculando ----
 
-int_ext <- com |>
+int_ext_amostras <- com |>
   t() |>
   as.incfreq() |>
   iNEXT::iNEXT(q = 0,
                datatype = "incidence_freq",
                endpoint = 21)
 
-int_ext
+int_ext_amostras
 
 ### Gráfico ----
 
 ### 1ª extrapolação ----
 
-int_ext |>
+int_ext_amostras |>
   iNEXT::ggiNEXT(type = 1) +
   scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
   scale_colour_manual(values = "orange") +
   scale_fill_manual(values = "orange") +
-  labs(x = "Número de indivíduos", y = " Riqueza de espécies") +
+  labs(x = "Unidades amostrais", y = "Riqueza") +
   theme_classic()
 
-ggsave(filename = "rarefacao_int_ext_ind.png",
+ggsave(filename = "rarefacao_int_ext_amostras.png",
        height = 10,
        width = 12)
