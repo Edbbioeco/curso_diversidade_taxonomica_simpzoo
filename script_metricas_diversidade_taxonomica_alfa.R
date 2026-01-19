@@ -124,4 +124,6 @@ ggsave(filename = "diversidade_taxonomica_gini_simpson.png",
 
 # Indices de Hill ----
 
-# Modelos lineares usando diversidade taxonômica alfa ----
+## Números de Hill ----
+
+## Equitabilidade de Pielou ----
