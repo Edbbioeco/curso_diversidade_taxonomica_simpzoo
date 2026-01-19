@@ -122,7 +122,25 @@ ggsave(filename = "diversidade_taxonomica_gini_simpson.png",
 
 ## Equitabilidade de Pielou ----
 
+pielou <- shannon_wiener / log(riqueza)
 
+df_div <- tibble::tibble(Comunidade = com |> rownames(),
+                         Riqueza = riqueza,
+                         `Shannon-Wiener` = shannon_wiener,
+                         `Gini-Simpson` = gini_simpson,
+                         `Equitabilidade de Pielou` = pielou)
+
+df_div
+
+df_div |>
+  ggplot(aes(Comunidade, `Equitabilidade de Pielou`)) +
+  geom_col(color = "black", fill = "black") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave(filename = "diversidade_taxonomica_pielou.png",
+       height = 10,
+       width = 12)
 
 # Indices de Hill ----
 
