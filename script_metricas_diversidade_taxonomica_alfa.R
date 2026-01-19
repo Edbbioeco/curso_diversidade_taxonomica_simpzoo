@@ -62,10 +62,10 @@ ggsave(filename = "diversidade_taxonomica_whittaker.png",
 
 ## Riqueza ----
 
-com |> vegan::specnumber()
+riqueza <- com |> vegan::specnumber()
 
 df_div <- tibble::tibble(Comunidade = com |> rownames(),
-                         Riqueza = com |> vegan::specnumber())
+                         Riqueza = riqueza)
 
 df_div
 
@@ -81,11 +81,11 @@ ggsave(filename = "diversidade_taxonomica_riqueza.png",
 
 ## Shannon-Wiener ----
 
-com |> vegan::diversity()
+shannon_wiener <- com |> vegan::diversity()
 
 df_div <- tibble::tibble(Comunidade = com |> rownames(),
-                         Riqueza = com |> vegan::specnumber(),
-                         `Shannon-Wiener` = com |> vegan::diversity())
+                         Riqueza = riqueza,
+                         `Shannon-Wiener` = shannon_wiener)
 
 df_div
 
@@ -101,12 +101,12 @@ ggsave(filename = "diversidade_taxonomica_shannon_wienner.png",
 
 ## Gini-Simpson ----
 
-com |> vegan::diversity(index = "simpson")
+gini_simpson <- com |> vegan::diversity(index = "simpson")
 
 df_div <- tibble::tibble(Comunidade = com |> rownames(),
-                         Riqueza = com |> vegan::specnumber(),
-                         `Shannon-Wiener` = com |> vegan::diversity(),
-                         `Gini-Simpson` = com |> vegan::diversity(index = "simpson"))
+                         Riqueza = riqueza,
+                         `Shannon-Wiener` = shannon_wiener,
+                         `Gini-Simpson` = gini_simpson)
 
 df_div
 
@@ -121,6 +121,8 @@ ggsave(filename = "diversidade_taxonomica_gini_simpson.png",
        width = 12)
 
 ## Equitabilidade de Pielou ----
+
+
 
 # Indices de Hill ----
 
