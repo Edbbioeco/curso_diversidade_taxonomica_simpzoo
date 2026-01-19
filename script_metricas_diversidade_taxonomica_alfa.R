@@ -177,4 +177,4 @@ ggsave(filename = "diversidade_taxonomica_hill_q2.png",
        height = 10,
        width = 12)
 
-## Equitabilidade de Pielou ----
+## Equitabilidade de Hill ----
