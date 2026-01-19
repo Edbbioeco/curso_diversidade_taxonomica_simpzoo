@@ -82,8 +82,6 @@ ggsave(filename = "diversidade_taxonomica_riqueza.png",
 
 ## Shannon-Wiener ----
 
-## Riqueza ----
-
 com |>
   vegan::diversity()
 
