@@ -178,3 +178,25 @@ ggsave(filename = "diversidade_taxonomica_hill_q2.png",
        width = 12)
 
 ## Equitabilidade de Hill ----
+
+eq_hill <- hill[2] / hill[1]
+
+eq_hill
+
+df_div <- tibble::tibble(Comunidade = com |> rownames(),
+                         hill) |>
+  dplyr::rename("Q = 1" = `1`,
+                "Q = 2" = `2`) |>
+  dplyr::mutate(`Equitabilidade de Hill` = eq_hill[, 1])
+
+df_div
+
+df_div |>
+  ggplot(aes(Comunidade, `Equitabilidade de Hill`)) +
+  geom_col(color = "black", fill = "black") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave(filename = "diversidade_taxonomica_eq_hill.png",
+       height = 10,
+       width = 12)
