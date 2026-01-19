@@ -68,6 +68,18 @@ ggsave(filename = "diversidade_taxonomica_beta_grafico_circulos.png",
 
 ## Índice de Sorensen ----
 
+### Total ----
+
+### Par-a-par ----
+
 ## Índice de Jaccard ----
 
+### Total ----
+
+### Par-a-par ----
+
 # Diversdade beta baseada em abundância de espécies ----
+
+## Total ----
+
+## Par-a-par ----
