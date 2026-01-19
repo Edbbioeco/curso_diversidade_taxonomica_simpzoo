@@ -146,4 +146,35 @@ ggsave(filename = "diversidade_taxonomica_pielou.png",
 
 ## Números de Hill ----
 
+hill <- com |> vegan::renyi(scales = 1:2, hill = TRUE)
+
+hill
+
+df_div <- tibble::tibble(Comunidade = com |> rownames(),
+                         hill) |>
+  dplyr::rename("Q = 1" = `1`,
+                "Q = 2" = `2`)
+
+df_div
+
+df_div |>
+  ggplot(aes(Comunidade, `Q = 1`)) +
+  geom_col(color = "black", fill = "black") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave(filename = "diversidade_taxonomica_hill_q1.png",
+       height = 10,
+       width = 12)
+
+df_div |>
+  ggplot(aes(Comunidade, `Q = 2`)) +
+  geom_col(color = "black", fill = "black") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave(filename = "diversidade_taxonomica_hill_q2.png",
+       height = 10,
+       width = 12)
+
 ## Equitabilidade de Pielou ----
