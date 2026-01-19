@@ -2,9 +2,9 @@
 
 library(tidyverse)
 
-library(vegan)
-
 library(scales)
+
+library(vegan)
 
 # Dados ----
 
@@ -62,7 +62,46 @@ ggsave(filename = "diversidade_taxonomica_whittaker.png",
 
 ## Riqueza ----
 
+com |>
+  vegan::specnumber()
+
+df_div <- tibble::tibble(Comunidade = com |> rownames(),
+                         Riqueza = com |> vegan::specnumber())
+
+df_div
+
+df_div |>
+  ggplot(aes(Comunidade, Riqueza)) +
+  geom_col(color = "black", fill = "black") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave(filename = "diversidade_taxonomica_riqueza.png",
+       height = 10,
+       width = 12)
+
 ## Shannon-Wiener ----
+
+## Riqueza ----
+
+com |>
+  vegan::diversity()
+
+df_div <- tibble::tibble(Comunidade = com |> rownames(),
+                         Riqueza = com |> vegan::specnumber(),
+                         `Shannon-Wiener` = com |> vegan::diversity())
+
+df_div
+
+df_div |>
+  ggplot(aes(Comunidade, `Shannon-Wiener`)) +
+  geom_col(color = "black", fill = "black") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave(filename = "diversidade_taxonomica_shannon_wienner.png",
+       height = 10,
+       width = 12)
 
 ## Gini-Simpson ----
 
