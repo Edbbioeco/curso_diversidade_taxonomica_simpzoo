@@ -111,12 +111,12 @@ df_div <- tibble::tibble(Comunidade = com |> rownames(),
 df_div
 
 df_div |>
-  ggplot(aes(Comunidade, `Shannon-Wiener`)) +
+  ggplot(aes(Comunidade, `Gini-Simpson`)) +
   geom_col(color = "black", fill = "black") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggsave(filename = "diversidade_taxonomica_shannon_wienner.png",
+ggsave(filename = "diversidade_taxonomica_gini_simpson.png",
        height = 10,
        width = 12)
 
