@@ -252,13 +252,91 @@ ggsave(filename = "diversidade_taxonomica_beta_jaccard.png",
 
 # Diversdade beta baseada em abundância de espécies ----
 
-## Total ----
+### Total ----
 
-## Par-a-par ----
+bray_total <- com |>
+  betapart::beta.multi.abund()
+
+bray_total
+
+### Par-a-par ----
 
 #### Calculando ----
 
+bray_parapar <- com |>
+  betapart::beta.pair.abund()
+
+bray_parapar
+
 #### Gráfico ----
+
+bray_matriz <- function(id, indice){
+
+  bray_matriz <- bray_parapar[[id]] |>
+    as.matrix()
+
+  bray_matriz[upper.tri(bray_matriz)] <- NA
+
+  bray_matriz_df <- bray_matriz |>
+    reshape2::melt() |>
+    dplyr::mutate(igual = dplyr::case_when(Var1 == Var2 ~ "sim",
+                                           .default = "não"),
+                  indice = paste0(indice,
+                                  " = ",
+                                  bray_total[[id]] |> round(2)),
+                  value = value |> round(2)) |>
+    dplyr::filter(!value |> is.na() & igual == "não") |>
+    dplyr::select(-igual) |>
+    dplyr::rename("Índice de Bray-Curtis" = value)
+
+  assign(paste0("bray_df_", indice),
+         bray_matriz_df,
+         envir = globalenv())
+
+}
+
+id <- 1:3
+
+indice_bray <- c("Substituição", "Aninhamento", "Bray-Curtis")
+
+purrr::map2(id, indice_bray, bray_matriz)
+
+df_bray <- ls(pattern = "bray_df_") |>
+  mget(envir = globalenv()) |>
+  dplyr::bind_rows() |>
+  dplyr::mutate(indice = indice |> forcats::fct_relevel(c("Bray-Curtis = 0.88",
+                                                          "Substituição = 0.76",
+                                                          "Aninhamento = 0.12")))
+
+df_bray
+
+df_bray |>
+  ggplot(aes(Var1, Var2,
+             fill = `Índice de Bray-Curtis`, label = `Índice de Bray-Curtis`)) +
+  geom_tile(color = "black", linewidth = 0.5) +
+  facet_wrap(~indice) +
+  geom_text(color = "black", size = 2.5, fontface = "bold") +
+  labs(x = NULL,
+       y = NULL) +
+  scale_fill_viridis_c(guide = guide_colorbar(title.position = "top",
+                                              title.hjust = 0.5,
+                                              barwidth = 20,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 1),
+                       limits = c(0, 1)) +
+  coord_equal() +
+  theme_classic() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 90, hjust = 0),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        legend.position = "bottom",
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
+
+ggsave(filename = "diversidade_taxonomica_beta_braycurtis.png",
+       height = 10, width = 12)
 
 # Espécies compartilhadas ----
 
