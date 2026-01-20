@@ -342,4 +342,19 @@ ggsave(filename = "diversidade_taxonomica_beta_braycurtis.png",
 
 ## Baseado em incidência de espécies ----
 
+### Calculando ----
+
+com |>
+  vegan::decostand(method = "pa") |>
+  betapart::betapart.core()
+
+### Gráfico ----
+
 ## Baseado em abundância de espécies ----
+
+### Calculando ----
+
+com |>
+  betapart::betapart.core.abund()
+
+### Gráfico ----
