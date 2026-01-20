@@ -35,8 +35,8 @@ com |> dplyr::glimpse()
 
 ## Adicionar nome às linhas ----
 
-rownames(com) <- c(paste0("Comunidade 0", 1:9),
-                   paste0("Comunidade ", 10:14))
+rownames(com) <- c(paste0("Com 0", 1:9),
+                   paste0("Com ", 10:14))
 
 com |> rownames()
 
@@ -125,16 +125,40 @@ purrr::map2(id, nome, sorensen_matriz)
 
 df_sorensen <- ls(pattern = "sorensen_df_") |>
   mget(envir = globalenv()) |>
-  dplyr::bind_rows()
+  dplyr::bind_rows() |>
+  dplyr::mutate(indice = indice |> forcats::fct_relevel(c("Sorensen = 0.78",
+                                                          "Substituição = 0.68",
+                                                          "Aninhamento = 0.11")))
 
 df_sorensen
 
 df_sorensen |>
   ggplot(aes(Var1, Var2,
              fill = `Índice de Sorensen`, label = `Índice de Sorensen`)) +
-  geom_tile(color = "black", linewidth = 1) +
-  geom_text(color = "black") +
+  geom_tile(color = "black", linewidth = 0.5) +
+  facet_wrap(~indice) +
+  geom_text(color = "black", size = 2.5, fontface = "bold") +
+  labs(x = NULL,
+       y = NULL) +
+  scale_fill_viridis_c(guide = guide_colorbar(title.position = "top",
+                                              title.hjust = 0.5,
+                                              barwidth = 20,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 1),
+                       limits = c(0, 1)) +
+  coord_equal() +
+  theme_classic() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 90, hjust = 0),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        legend.position = "bottom",
+        strip.text = element_text(color = "black", size = 20)) +
   ggview::canvas(height = 10, width = 12)
+
+ggsave(filename = "diversidade_taxonomica_beta_soresen.png",
+       height = 10, width = 12)
 
 ## Índice de Jaccard ----
 
