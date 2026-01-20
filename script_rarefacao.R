@@ -233,7 +233,7 @@ ggsave(filename = "rarefacao_int_ext_ind.png",
 
 int_ext_amostras <- com |>
   t() |>
-  as.incfreq() |>
+  iNEXT::as.incfreq() |>
   iNEXT::iNEXT(q = 0,
                datatype = "incidence_freq",
                endpoint = 21)
