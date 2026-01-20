@@ -213,8 +213,6 @@ int_ext_indi
 
 ### Gráfico ----
 
-### 1ª extrapolação ----
-
 int_ext_indi |>
   iNEXT::ggiNEXT(type = 1) +
   scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
@@ -241,8 +239,6 @@ int_ext_amostras <- com |>
 int_ext_amostras
 
 ### Gráfico ----
-
-### 1ª extrapolação ----
 
 int_ext_amostras |>
   iNEXT::ggiNEXT(type = 1) +
