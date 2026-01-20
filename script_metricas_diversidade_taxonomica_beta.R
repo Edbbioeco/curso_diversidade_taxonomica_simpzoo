@@ -119,9 +119,9 @@ sorensen_matriz <- function(id, indice){
 
 id <- 1:3
 
-indice <- c("Substituição", "Aninhamento", "Sorensen")
+indice_sorensen <- c("Substituição", "Aninhamento", "Sorensen")
 
-purrr::map2(id, nome, sorensen_matriz)
+purrr::map2(id, indice_sorensen, sorensen_matriz)
 
 df_sorensen <- ls(pattern = "sorensen_df_") |>
   mget(envir = globalenv()) |>
@@ -164,11 +164,91 @@ ggsave(filename = "diversidade_taxonomica_beta_soresen.png",
 
 ### Total ----
 
+jaccard_total <- com |>
+  vegan::decostand(method = "pa") |>
+  betapart::beta.multi(index.family = "jaccard")
+
+jaccard_total
+
 ### Par-a-par ----
 
 #### Calculando ----
 
+jaccard_parapar <- com |>
+  vegan::decostand(method = "pa") |>
+  betapart::beta.pair(index.family = "jaccard")
+
+jaccard_parapar
+
 #### Gráfico ----
+
+jaccard_matriz <- function(id, indice){
+
+  jaccard_matriz <- jaccard_parapar[[id]] |>
+    as.matrix()
+
+  jaccard_matriz[upper.tri(jaccard_matriz)] <- NA
+
+  jaccard_matriz_df <- jaccard_matriz |>
+    reshape2::melt() |>
+    dplyr::mutate(igual = dplyr::case_when(Var1 == Var2 ~ "sim",
+                                           .default = "não"),
+                  indice = paste0(indice,
+                                  " = ",
+                                  jaccard_total[[id]] |> round(2)),
+                  value = value |> round(2)) |>
+    dplyr::filter(!value |> is.na() & igual == "não") |>
+    dplyr::select(-igual) |>
+    dplyr::rename("Índice de Jaccard" = value)
+
+  assign(paste0("jaccard_df_", indice),
+         jaccard_matriz_df,
+         envir = globalenv())
+
+}
+
+id <- 1:3
+
+indice_jaccard <- c("Substituição", "Aninhamento", "Jaccard")
+
+purrr::map2(id, indice_jaccard, jaccard_matriz)
+
+df_jaccard <- ls(pattern = "jaccard_df_") |>
+  mget(envir = globalenv()) |>
+  dplyr::bind_rows() |>
+  dplyr::mutate(indice = indice |> forcats::fct_relevel(c("Jaccard = 0.88",
+                                                          "Substituição = 0.81",
+                                                          "Aninhamento = 0.07")))
+
+df_jaccard
+
+df_jaccard |>
+  ggplot(aes(Var1, Var2,
+             fill = `Índice de Jaccard`, label = `Índice de Jaccard`)) +
+  geom_tile(color = "black", linewidth = 0.5) +
+  facet_wrap(~indice) +
+  geom_text(color = "black", size = 2.5, fontface = "bold") +
+  labs(x = NULL,
+       y = NULL) +
+  scale_fill_viridis_c(guide = guide_colorbar(title.position = "top",
+                                              title.hjust = 0.5,
+                                              barwidth = 20,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 1),
+                       limits = c(0, 1)) +
+  coord_equal() +
+  theme_classic() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 90, hjust = 0),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        legend.position = "bottom",
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
+
+ggsave(filename = "diversidade_taxonomica_beta_jaccard.png",
+       height = 10, width = 12)
 
 # Diversdade beta baseada em abundância de espécies ----
 
