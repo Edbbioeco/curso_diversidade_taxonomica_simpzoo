@@ -13,6 +13,8 @@ library(tidyverse)
 
 library(ordenaR)
 
+library(vegan)
+
 library(betapart)
 
 library(reshape2)
@@ -70,7 +72,17 @@ ggsave(filename = "diversidade_taxonomica_beta_grafico_circulos.png",
 
 ### Total ----
 
+sorensen_total <- com |>
+  vegan::decostand(method = "pa") |>
+  betapart::beta.multi()
+
+sorensen_total
+
 ### Par-a-par ----
+
+#### Calculando ----
+
+#### Gráfico ----
 
 ## Índice de Jaccard ----
 
@@ -78,8 +90,22 @@ ggsave(filename = "diversidade_taxonomica_beta_grafico_circulos.png",
 
 ### Par-a-par ----
 
+#### Calculando ----
+
+#### Gráfico ----
+
 # Diversdade beta baseada em abundância de espécies ----
 
 ## Total ----
 
 ## Par-a-par ----
+
+#### Calculando ----
+
+#### Gráfico ----
+
+# Espécies compartilhadas ----
+
+## Baseado em incidência de espécies ----
+
+## Baseado em abundância de espécies ----
