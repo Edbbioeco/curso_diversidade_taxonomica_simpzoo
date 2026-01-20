@@ -82,7 +82,49 @@ sorensen_total
 
 #### Calculando ----
 
+sorensen_parapar <- com |>
+  vegan::decostand(method = "pa") |>
+  betapart::beta.pair()
+
+sorensen_parapar
+
 #### Gráfico ----
+
+sorensen_matriz <- function(id, indice){
+
+  sorensen_matriz <- sorensen_parapar[[id]] |>
+    as.matrix()
+
+  sorensen_matriz[upper.tri(sorensen_matriz)] <- NA
+
+  sorensen_matriz_df <- sorensen_matriz |>
+    reshape2::melt() |>
+    dplyr::mutate(igual = dplyr::case_when(Var1 == Var2 ~ "sim",
+                                           .default = "não"),
+                  indice = paste0(indice,
+                                  " = ",
+                                  sorensen_total[[id]] |> round(2))) |>
+    dplyr::filter(!value |> is.na() & igual == "não") |>
+    dplyr::select(-igual) |>
+    dplyr::rename("Índice de Sorensen" = value)
+
+  assign(paste0("sorensen_df_", indice),
+         sorensen_matriz_df,
+         envir = globalenv())
+
+}
+
+id <- 1:3
+
+indice <- c("Substituição", "Aninhamento", "Sorensen")
+
+purrr::map2(id, nome, sorensen_matriz)
+
+df_sorensen <- ls(pattern = "sorensen_df_") |>
+  mget(envir = globalenv()) |>
+  dplyr::bind_rows()
+
+df_sorensen
 
 ## Índice de Jaccard ----
 
