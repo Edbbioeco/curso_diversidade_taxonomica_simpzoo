@@ -344,17 +344,106 @@ ggsave(filename = "diversidade_taxonomica_beta_braycurtis.png",
 
 ### Calculando ----
 
-com |>
+sps_compartilhadas <- com |>
   vegan::decostand(method = "pa") |>
   betapart::betapart.core()
 
+sps_compartilhadas
+
 ### Gráfico ----
+
+sps_compartilhadas_matriz <- sps_compartilhadas[[5]]
+
+sps_compartilhadas_matriz[upper.tri(sps_compartilhadas_matriz)] <- NA
+
+df_compartilhadas_inc <- sps_compartilhadas_matriz |>
+  reshape2::melt() |>
+  dplyr::mutate(igual = dplyr::case_when(Var1 == Var2 ~ "sim",
+                                         .default = "não")) |>
+  dplyr::filter(!value |> is.na() & igual == "não") |>
+  dplyr::select(-igual) |>
+  dplyr::rename("Quantidade de espécies compartilhadas" = value)
+
+df_compartilhadas_inc
+
+df_compartilhadas_inc |>
+  ggplot(aes(Var1, Var2,
+             fill = `Quantidade de espécies compartilhadas`,
+             label = `Quantidade de espécies compartilhadas`)) +
+  geom_tile(color = "black", linewidth = 0.5) +
+  geom_text(color = "black", size = 5, fontface = "bold") +
+  labs(x = NULL,
+       y = NULL) +
+  scale_fill_viridis_c(guide = guide_colorbar(title.position = "top",
+                                              title.hjust = 0.5,
+                                              barwidth = 20,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 1)) +
+  coord_equal() +
+  theme_classic() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 90, hjust = 0),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        legend.position = "bottom",
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
+
+ggsave(filename = "diversidade_taxonomica_beta_espécies_compartilhadas.png",
+       height = 10, width = 12)
 
 ## Baseado em abundância de espécies ----
 
 ### Calculando ----
 
-com |>
+sps_compartilhadas_abu <- com |>
   betapart::betapart.core.abund()
+
+sps_compartilhadas_abu
+
+### Gráfico ----
+
+sps_compartilhadas_abu_matriz <- sps_compartilhadas_abu[[3]] |>
+  as.matrix()
+
+sps_compartilhadas_abu_matriz[upper.tri(sps_compartilhadas_abu_matriz)] <- NA
+
+df_compartilhadas_abu <- sps_compartilhadas_abu_matriz |>
+  reshape2::melt() |>
+  dplyr::mutate(igual = dplyr::case_when(Var1 == Var2 ~ "sim",
+                                         .default = "não")) |>
+  dplyr::filter(!value |> is.na() & igual == "não") |>
+  dplyr::select(-igual) |>
+  dplyr::rename("Abundância compartilhada" = value)
+
+df_compartilhadas_abu
+
+df_compartilhadas_abu |>
+  ggplot(aes(Var1, Var2,
+             fill = `Abundância compartilhada`,
+             label = `Abundância compartilhada`)) +
+  geom_tile(color = "black", linewidth = 0.5) +
+  geom_text(color = "black", size = 5, fontface = "bold") +
+  labs(x = NULL,
+       y = NULL) +
+  scale_fill_viridis_c(guide = guide_colorbar(title.position = "top",
+                                              title.hjust = 0.5,
+                                              barwidth = 20,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 1)) +
+  coord_equal() +
+  theme_classic() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 90, hjust = 0),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        legend.position = "bottom",
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
+
+ggsave(filename = "diversidade_taxonomica_beta_abundancia_compartilhada.png",
+       height = 10, width = 12)
 
 ### Gráfico ----
