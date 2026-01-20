@@ -2,7 +2,8 @@
 
 install.packages(c("tidyverse",
                    "scales",
-                   "vegan"))
+                   "vegan",
+                   "iNEXT"))
 
 # Carregando os pacotes ----
 
@@ -11,6 +12,8 @@ library(tidyverse)
 library(scales)
 
 library(vegan)
+
+library(iNEXT)
 
 # Dados ----
 
@@ -204,5 +207,63 @@ df_div |>
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggsave(filename = "diversidade_taxonomica_eq_hill.png",
+       height = 10,
+       width = 12)
+
+## Rarefação baseado por números de Hill com Q = 1 ----
+
+### Calculando ----
+
+int_ext_hillq1 <- com |>
+  t() |>
+  iNEXT::as.incfreq() |>
+  iNEXT::iNEXT(q = 1,
+               datatype = "incidence_freq",
+               endpoint = 21)
+
+int_ext_hillq1
+
+### Gráfico ----
+
+### 1ª extrapolação ----
+
+int_ext_hillq1 |>
+  iNEXT::ggiNEXT(type = 1) +
+  scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
+  scale_colour_manual(values = "orange") +
+  scale_fill_manual(values = "orange") +
+  labs(x = "Unidades amostrais", y = "Q = 1") +
+  theme_classic()
+
+ggsave(filename = "rarefacao_int_ext_hillq1.png",
+       height = 10,
+       width = 12)
+
+## Rarefação baseado por números de Hill com Q = 2 ----
+
+### Calculando ----
+
+int_ext_hillq2 <- com |>
+  t() |>
+  iNEXT::as.incfreq() |>
+  iNEXT::iNEXT(q = 2,
+               datatype = "incidence_freq",
+               endpoint = 21)
+
+int_ext_hillq2
+
+### Gráfico ----
+
+### 1ª extrapolação ----
+
+int_ext_hillq2 |>
+  iNEXT::ggiNEXT(type = 1) +
+  scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
+  scale_colour_manual(values = "orange") +
+  scale_fill_manual(values = "orange") +
+  labs(x = "Unidades amostrais", y = "Q = 2") +
+  theme_classic()
+
+ggsave(filename = "rarefacao_int_ext_hillq2.png",
        height = 10,
        width = 12)
