@@ -19,6 +19,8 @@ library(betapart)
 
 library(reshape2)
 
+library(ggview)
+
 # Dados ----
 
 ## Importando ----
@@ -103,7 +105,8 @@ sorensen_matriz <- function(id, indice){
                                            .default = "não"),
                   indice = paste0(indice,
                                   " = ",
-                                  sorensen_total[[id]] |> round(2))) |>
+                                  sorensen_total[[id]] |> round(2)),
+                  value = value |> round(2)) |>
     dplyr::filter(!value |> is.na() & igual == "não") |>
     dplyr::select(-igual) |>
     dplyr::rename("Índice de Sorensen" = value)
@@ -125,6 +128,13 @@ df_sorensen <- ls(pattern = "sorensen_df_") |>
   dplyr::bind_rows()
 
 df_sorensen
+
+df_sorensen |>
+  ggplot(aes(Var1, Var2,
+             fill = `Índice de Sorensen`, label = `Índice de Sorensen`)) +
+  geom_tile(color = "black", linewidth = 1) +
+  geom_text(color = "black") +
+  ggview::canvas(height = 10, width = 12)
 
 ## Índice de Jaccard ----
 
