@@ -208,6 +208,59 @@ ggsave(filename = "mapa_distribuicao_riqueza.png",
 
 ## Shannon-Wiener ----
 
+## Calculando a riqueza ----
+
+shannon <- comp_occ |>
+  tibble::column_to_rownames("ID") |>
+  vegan::diversity()
+
+shannon
+
+## Gerando um dataframe com os dados de riqueza ----
+
+df_shannon <- tibble::tibble(ID = comp_occ$ID,
+                             `Shannon-Winner` = shannon)
+
+df_shannon
+
+## Adicionando uma coluna no shapefile de grade com as informações de riqueza ----
+
+grade %<>%
+  dplyr::left_join(df_shannon,
+                   by = "ID") %<>%
+  dplyr::mutate(`Shannon-Winner` = dplyr::case_when(`Shannon-Winner` |> is.na() ~ 0,
+                                                     .default = `Shannon-Winner`))
+
+grade
+
+## Rasterizando ----
+
+raster_shannon <- terra::rasterize(grade |> terra::vect(),
+                                   template,
+                                   field = "Shannon-Winner")
+
+raster_shannon
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_shannon) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Shannon-Winner",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_shannon_winner.png",
+       height = 10, width = 12)
+
 ## Gini-Simpson ----
 
 ## Índices de Hill ----
