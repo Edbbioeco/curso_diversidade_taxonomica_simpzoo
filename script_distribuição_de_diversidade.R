@@ -409,7 +409,7 @@ df_sorensen <- tibble::tibble(ID = comp_occ$ID,
 
 df_sorensen
 
-## Adicionando uma coluna no shapefile de grade com as informações de Hill ----
+## Adicionando uma coluna no shapefile de grade com as informações de Sorensen ----
 
 grade %<>%
   dplyr::left_join(df_sorensen,
@@ -450,6 +450,66 @@ ggsave(filename = "mapa_distribuicao_sorensen.png",
        height = 10, width = 12)
 
 ## Jaccard ----
+
+### Calculando a diversidade beta ----
+
+jaccard <- comp_occ |>
+  tibble::column_to_rownames("ID") |>
+  vegan::decostand(method = "pa") |>
+  betapart::beta.pair(index.family = "jaccard") %>%
+  .$beta.jac |>
+  as.matrix() |>
+  as.data.frame() |>
+  rowMeans()
+
+jaccard
+
+### Gerando o dataframe com os valores ----
+
+df_jaccard <- tibble::tibble(ID = comp_occ$ID,
+                             Jaccard = jaccard)
+
+df_jaccard
+
+## Adicionando uma coluna no shapefile de grade com as informações de Jaccard ----
+
+grade %<>%
+  dplyr::left_join(df_jaccard,
+                   by = "ID") %<>%
+  dplyr::mutate(Jaccard = dplyr::case_when(Jaccard |> is.na() ~ 0,
+                                           .default = Jaccard))
+
+grade
+
+## Rasterizando ----
+
+raster_jaccard <- terra::rasterize(grade |> terra::vect(),
+                                   template,
+                                   field = "Jaccard")
+
+raster_jaccard
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_jaccard) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Índice de Dissimilaridade de Jaccard",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5),
+                       limits = c(0, 1)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_jaccard.png",
+       height = 10, width = 12)
 
 ## Bray Curtis ----
 
