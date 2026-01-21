@@ -143,6 +143,12 @@ comp_occ
 
 # Raster de base ----
 
+template <- grade |>
+  terra::vect() |>
+  terra::rast(res = res_grade)
+
+template
+
 # Distribuição dos valores de riqueza ----
 
 # Distribuição dos valores de diversidade alfa ----
