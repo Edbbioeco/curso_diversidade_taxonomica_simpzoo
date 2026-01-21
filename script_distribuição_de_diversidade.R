@@ -576,50 +576,50 @@ ggsave(filename = "mapa_distribuicao_bray_curtis.png",
 
 ### Calculando a diversidade beta ----
 
-bray <- comp_occ |>
+sps_comp <- comp_occ |>
   tibble::column_to_rownames("ID") |>
   vegan::decostand(method = "pa") |>
-  betapart::beta.pair.abund() %>%
-  .$beta.bray |>
+  betapart::betapart.core() %>%
+  .$shared |>
   as.matrix() |>
   as.data.frame() |>
   rowMeans()
 
-bray
+sps_comp
 
 ### Gerando o dataframe com os valores ----
 
-df_bray <- tibble::tibble(ID = comp_occ$ID,
-                          `Bray-Curtis` = bray)
+df_sps_comp <- tibble::tibble(ID = comp_occ$ID,
+                              sps_comp = sps_comp)
 
-df_bray
+df_sps_comp
 
 ### Adicionando uma coluna no shapefile de grade com as informações de Bray-Curtis ----
 
 grade %<>%
-  dplyr::left_join(df_bray,
+  dplyr::left_join(df_sps_comp,
                    by = "ID") %<>%
-  dplyr::mutate(`Bray-Curtis` = dplyr::case_when(`Bray-Curtis` |> is.na() ~ 0,
-                                                 .default = `Bray-Curtis`))
+  dplyr::mutate(sps_comp = dplyr::case_when(sps_comp |> is.na() ~ 0,
+                                            .default = sps_comp))
 
 grade
 
 ### Rasterizando ----
 
-raster_bray <- terra::rasterize(grade |> terra::vect(),
-                                template,
-                                field = "Bray-Curtis")
+raster_sps_comp <- terra::rasterize(grade |> terra::vect(),
+                                    template,
+                                    field = "sps_comp")
 
-raster_bray
+raster_sps_comp
 
 ## Visualizando ----
 
 ggplot() +
   geom_sf(data = br, color = "black") +
-  tidyterra::geom_spatraster(data = raster_bray) +
+  tidyterra::geom_spatraster(data = raster_sps_comp) +
   geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
   scale_fill_viridis_c(na.value = NA,
-                       guide = guide_colorbar(title = "Índice de Dissimilaridade de Bray-Curtis",
+                       guide = guide_colorbar(title = "Quantidade de Espécies Compartilhadas",
                                               title.position = "top",
                                               title.hjust = 0.5,
                                               barheight = 0.5,
@@ -627,11 +627,11 @@ ggplot() +
                                               frame.colour = "black",
                                               ticks.colour = "black",
                                               ticks.linewidth = 0.5),
-                       limits = c(0, 1)) +
+                       limits = c(0, 13)) +
   theme_classic() +
   theme(legend.position = "bottom")
 
-ggsave(filename = "mapa_distribuicao_bray_curtis.png",
+ggsave(filename = "mapa_distribuicao_especies_compartilhadas.png",
        height = 10, width = 12)
 
 ## Abundância compartilhada ----
