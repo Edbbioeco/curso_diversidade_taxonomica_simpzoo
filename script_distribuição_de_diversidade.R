@@ -23,6 +23,26 @@ library(betapart)
 
 # Dados ----
 
+## Ocorrências ----
+
+### Importando ----
+
+### Visualizando ----
+
+### Transformando em shapefile ----
+
+## Shapefile da Mata Atlântica ----
+
+### Importando ----
+
+### Visualizando ----
+
+## Shapefile do Brasil ----
+
+### Importando ----
+
+### Visualizando ----
+
 # Criando a grade ----
 
 # Montando as comunidades por grades ----
