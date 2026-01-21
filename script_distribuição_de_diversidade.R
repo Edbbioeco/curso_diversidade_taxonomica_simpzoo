@@ -409,7 +409,7 @@ df_sorensen <- tibble::tibble(ID = comp_occ$ID,
 
 df_sorensen
 
-## Adicionando uma coluna no shapefile de grade com as informações de Sorensen ----
+### Adicionando uma coluna no shapefile de grade com as informações de Sorensen ----
 
 grade %<>%
   dplyr::left_join(df_sorensen,
@@ -419,7 +419,7 @@ grade %<>%
 
 grade
 
-## Rasterizando ----
+### Rasterizando ----
 
 raster_soresen <- terra::rasterize(grade |> terra::vect(),
                                    template,
@@ -427,7 +427,7 @@ raster_soresen <- terra::rasterize(grade |> terra::vect(),
 
 raster_soresen
 
-## Visualizando ----
+### Visualizando ----
 
 ggplot() +
   geom_sf(data = br, color = "black") +
@@ -471,7 +471,7 @@ df_jaccard <- tibble::tibble(ID = comp_occ$ID,
 
 df_jaccard
 
-## Adicionando uma coluna no shapefile de grade com as informações de Jaccard ----
+### Adicionando uma coluna no shapefile de grade com as informações de Jaccard ----
 
 grade %<>%
   dplyr::left_join(df_jaccard,
@@ -481,7 +481,7 @@ grade %<>%
 
 grade
 
-## Rasterizando ----
+### Rasterizando ----
 
 raster_jaccard <- terra::rasterize(grade |> terra::vect(),
                                    template,
@@ -489,7 +489,7 @@ raster_jaccard <- terra::rasterize(grade |> terra::vect(),
 
 raster_jaccard
 
-## Visualizando ----
+### Visualizando ----
 
 ggplot() +
   geom_sf(data = br, color = "black") +
@@ -512,6 +512,65 @@ ggsave(filename = "mapa_distribuicao_jaccard.png",
        height = 10, width = 12)
 
 ## Bray Curtis ----
+
+### Calculando a diversidade beta ----
+
+bray <- comp_occ |>
+  tibble::column_to_rownames("ID") |>
+  betapart::beta.pair.abund() %>%
+  .$beta.bray |>
+  as.matrix() |>
+  as.data.frame() |>
+  rowMeans()
+
+bray
+
+### Gerando o dataframe com os valores ----
+
+df_bray <- tibble::tibble(ID = comp_occ$ID,
+                          `Bray-Curtis` = bray)
+
+df_bray
+
+### Adicionando uma coluna no shapefile de grade com as informações de Bray-Curtis ----
+
+grade %<>%
+  dplyr::left_join(df_bray,
+                   by = "ID") %<>%
+  dplyr::mutate(`Bray-Curtis` = dplyr::case_when(`Bray-Curtis` |> is.na() ~ 0,
+                                                 .default = `Bray-Curtis`))
+
+grade
+
+### Rasterizando ----
+
+raster_bray <- terra::rasterize(grade |> terra::vect(),
+                                template,
+                                field = "Bray-Curtis")
+
+raster_bray
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_bray) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Índice de Dissimilaridade de Bray-Curtis",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5),
+                       limits = c(0, 1)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_bray_curtis.png",
+       height = 10, width = 12)
 
 ## Espécies compartilhadas ----
 
