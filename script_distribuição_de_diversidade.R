@@ -1,6 +1,25 @@
 # Instalando os pacotes -----
 
+install.packages(c("tidyverse",
+                   "sf",
+                   "vegan",
+                   "terra",
+                   "tidyterra",
+                   "betapart"))
+
 # Carregando os pacotes ----
+
+library(tidyverse)
+
+library(sf)
+
+library(vegan)
+
+library(terra)
+
+library(tidyterra)
+
+library(betapart)
 
 # Dados ----
 
