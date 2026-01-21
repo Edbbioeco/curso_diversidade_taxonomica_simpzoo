@@ -206,5 +206,11 @@ ggsave(filename = "mapa_distribuicao_riqueza.png",
 
 # Distribuição dos valores de diversidade alfa ----
 
+## Shannon-Wiener ----
+
+## Gini-Simpson ----
+
+## Índices de Hill ----
+
 # Distribuição dos valores de diversidade beta ----
 
