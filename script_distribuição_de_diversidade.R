@@ -263,6 +263,59 @@ ggsave(filename = "mapa_distribuicao_shannon_winner.png",
 
 ## Gini-Simpson ----
 
+## Calculando a riqueza ----
+
+simpson <- comp_occ |>
+  tibble::column_to_rownames("ID") |>
+  vegan::diversity(index = "simpson")
+
+simpson
+
+## Gerando um dataframe com os dados de riqueza ----
+
+df_simpson <- tibble::tibble(ID = comp_occ$ID,
+                             `Gini-Simpson` = simpson)
+
+df_simpson
+
+## Adicionando uma coluna no shapefile de grade com as informações de riqueza ----
+
+grade %<>%
+  dplyr::left_join(df_simpson,
+                   by = "ID") %<>%
+  dplyr::mutate(`Gini-Simpson` = dplyr::case_when(`Gini-Simpson` |> is.na() ~ 0,
+                                                  .default = `Gini-Simpson`))
+
+grade
+
+## Rasterizando ----
+
+raster_simpson <- terra::rasterize(grade |> terra::vect(),
+                                   template,
+                                   field = "Gini-Simpson")
+
+raster_simpson
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_simpson) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Gini-Simpson",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_shannon_simpson.png",
+       height = 10, width = 12)
+
 ## Índices de Hill ----
 
 # Distribuição dos valores de diversidade beta ----
