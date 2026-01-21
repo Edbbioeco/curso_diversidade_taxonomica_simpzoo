@@ -141,6 +141,8 @@ comp_occ <- occ_sf |>
 
 comp_occ
 
+# Raster de base ----
+
 # Distribuição dos valores de riqueza ----
 
 # Distribuição dos valores de diversidade alfa ----
