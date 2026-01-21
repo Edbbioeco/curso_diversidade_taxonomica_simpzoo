@@ -313,10 +313,73 @@ ggplot() +
   theme_classic() +
   theme(legend.position = "bottom")
 
-ggsave(filename = "mapa_distribuicao_shannon_simpson.png",
+ggsave(filename = "mapa_distribuicao_gini_simpson.png",
        height = 10, width = 12)
 
 ## Índices de Hill ----
+
+## Calculando a riqueza ----
+
+hill <- comp_occ |>
+  tibble::column_to_rownames("ID") |>
+  vegan::renyi(scales = 1:2)
+
+hill
+
+## Gerando um dataframe com os dados de riqueza ----
+
+df_hill <- tibble::tibble(ID = comp_occ$ID,
+                             `Q = 1` = hill$`1`,
+                             `Q = 2` = hill$`2`)
+
+df_hill
+
+## Adicionando uma coluna no shapefile de grade com as informações de riqueza ----
+
+grade %<>%
+  dplyr::left_join(df_hill,
+                   by = "ID") %<>%
+  dplyr::mutate(`Q = 1` = dplyr::case_when(`Q = 1` |> is.na() ~ 0,
+                                           .default = `Q = 1`),
+                `Q = 2` = dplyr::case_when(`Q = 2` |> is.na() ~ 0,
+                                           .default = `Q = 2`))
+
+grade
+
+## Rasterizando ----
+
+raster_hill_q1 <- terra::rasterize(grade |> terra::vect(),
+                                   template,
+                                   field = "Q = 1")
+
+raster_hill_q2 <- terra::rasterize(grade |> terra::vect(),
+                                      template,
+                                      field = "Q = 2")
+
+raster_hill <- c(raster_simpson_q1, raster_simpson_q2)
+
+raster_hill
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_hill) +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Gini-Simpson",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_hill.png",
+       height = 10, width = 12)
 
 # Distribuição dos valores de diversidade beta ----
 
