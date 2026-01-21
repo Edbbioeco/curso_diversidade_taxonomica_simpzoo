@@ -115,7 +115,8 @@ grade <- ma |>
   sf::st_make_grid(cellsize = res_grade) |>
   sf::st_sf() |>
   sf::st_join(ma) |>
-  tidyr::drop_na()
+  tidyr::drop_na() |>
+  dplyr::mutate(ID = dplyr::row_number())
 
 ## Visualizando a grade ----
 
@@ -127,6 +128,13 @@ ggplot() +
   geom_sf(data = occ_sf)
 
 # Montando as comunidades por grades ----
+
+occ_sf |>
+  sf::st_join(grade) |>
+  tidyr::drop_na() |>
+  as.data.frame() |>
+  dplyr::summarise(Abundancia = dplyr::n(),
+                   .by = c(ID, species))
 
 # Distribuição dos valores de riqueza ----
 
