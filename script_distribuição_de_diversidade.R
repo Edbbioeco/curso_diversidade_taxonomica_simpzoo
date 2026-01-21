@@ -76,15 +76,55 @@ ggplot() +
 
 ### Importando ----
 
+ma <- sf::st_read("mata_atlantica.shp")
+
 ### Visualizando ----
+
+ma
+
+ggplot() +
+  geom_sf(data = ma, color = "darkgreen", fill = "forestgreen") +
+  geom_sf(data = occ_sf)
 
 ## Shapefile do Brasil ----
 
 ### Importando ----
 
+br <- sf::st_read("brasil.shp")
+
 ### Visualizando ----
 
+br
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  geom_sf(data = ma, color = "darkgreen", fill = "forestgreen") +
+  geom_sf(data = occ_sf)
+
 # Criando a grade ----
+
+## Escolhando a resolução ----
+
+res_grade <- (50 * 1) / 111.3194
+
+res_grade
+
+## Gerando a grade geral ----
+
+grade <- ma |>
+  sf::st_make_grid(cellsize = res_grade) |>
+  sf::st_sf() |>
+  sf::st_join(ma) |>
+  tidyr::drop_na()
+
+## Visualizando a grade ----
+
+grade
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  geom_sf(data = grade, color = "darkgreen", fill = NA) +
+  geom_sf(data = occ_sf)
 
 # Montando as comunidades por grades ----
 
