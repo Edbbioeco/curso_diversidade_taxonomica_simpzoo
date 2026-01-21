@@ -23,13 +23,29 @@ library(betapart)
 
 # Dados ----
 
-## Ocorrências ----
+## Lista de espécies ----
 
 ### Importando ----
 
 ### Visualizando ----
 
+## Ocorrências ----
+
+### Importando ----
+
+occ <- readr::read_csv("ATLANTIC_AMPHIBIANS_species.csv")
+
+### Visualizando ----
+
+occ
+
+occ |> dplyr::glimpse()
+
 ### Transformando em shapefile ----
+
+occ |>
+  dplyr::filter(!longitude |> is.na() & !latitude |> is.na()) |>
+
 
 ## Shapefile da Mata Atlântica ----
 
