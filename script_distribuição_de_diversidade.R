@@ -188,7 +188,15 @@ raster_riqueza
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_riqueza) +
-  scale_fill_viridis_c(na.value = NA) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Riqueza",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5)) +
   theme_classic() +
   theme(legend.position = "bottom")
 
