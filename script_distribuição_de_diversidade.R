@@ -15,9 +15,9 @@ library(magrittr)
 
 library(sf)
 
-library(vegan)
-
 library(terra)
+
+library(vegan)
 
 library(tidyterra)
 
@@ -150,6 +150,12 @@ template <- grade |>
 template
 
 # Distribuição dos valores de riqueza ----
+
+## Calculando a riqueza ----
+
+comp_occ |>
+  tibble::column_to_rownames("ID") |>
+  vegan::specnumber()
 
 # Distribuição dos valores de diversidade alfa ----
 
