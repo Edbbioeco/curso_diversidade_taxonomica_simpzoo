@@ -246,6 +246,7 @@ raster_shannon
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_shannon) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Shannon-Winner",
                                               title.position = "top",
@@ -301,6 +302,7 @@ raster_simpson
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_simpson) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Gini-Simpson",
                                               title.position = "top",
@@ -365,6 +367,7 @@ raster_hill
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_hill) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
   facet_wrap(~lyr) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Índice de Hill",
