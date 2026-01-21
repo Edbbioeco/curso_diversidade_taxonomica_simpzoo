@@ -170,11 +170,27 @@ df_riqueza
 
 grade %<>%
   dplyr::left_join(df_riqueza,
-                   by = "ID")
+                   by = "ID") %<>%
+  tidyr::drop_na()
 
 grade
 
 ## Rasterizando ----
+
+raster_riqueza <- terra::rasterize(grade |> terra::vect(),
+                                   template,
+                                   field = "Riqueza")
+
+raster_riqueza
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_riqueza) +
+  scale_fill_viridis_c(na.value = NA) +
+  theme_classic() +
+  theme(legend.position = "bottom")
 
 # Distribuição dos valores de diversidade alfa ----
 
