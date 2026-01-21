@@ -383,3 +383,13 @@ ggsave(filename = "mapa_distribuicao_hill.png",
 
 # Distribuição dos valores de diversidade beta ----
 
+## Sorensen ----
+
+## Jaccard ----
+
+## Bray Curtis ----
+
+## Espécies compartilhadas ----
+
+## Abundância compartilhada ----
+
