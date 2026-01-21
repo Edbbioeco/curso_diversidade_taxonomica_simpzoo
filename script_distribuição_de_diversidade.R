@@ -11,6 +11,8 @@ install.packages(c("tidyverse",
 
 library(tidyverse)
 
+library(magrittr)
+
 library(sf)
 
 library(vegan)
@@ -27,13 +29,28 @@ library(betapart)
 
 ### Importando ----
 
+sps <- readr::read_csv("ATLANTIC_AMPHIBIANS_species.csv")
+
 ### Visualizando ----
+
+sps
+
+sps |> dplyr::glimpse()
+
+### Tratando ----
+
+sps %<>%
+  dplyr::select(id, valid_name) %<>%
+  dplyr::filter(!valid_name |> is.na()) %<>%
+  dplyr::rename("species" = valid_name)
+
+sps
 
 ## Ocorrências ----
 
 ### Importando ----
 
-occ <- readr::read_csv("ATLANTIC_AMPHIBIANS_species.csv")
+occ <- readr::read_csv("ATLANTIC_AMPHIBIANS_sites.csv")
 
 ### Visualizando ----
 
@@ -43,9 +60,17 @@ occ |> dplyr::glimpse()
 
 ### Transformando em shapefile ----
 
-occ |>
+occ_sf <- occ |>
+  dplyr::select(id, longitude, latitude) |>
+  dplyr::left_join(sps, by = "id") |>
   dplyr::filter(!longitude |> is.na() & !latitude |> is.na()) |>
+  sf::st_as_sf(coords = c("longitude", "latitude"),
+               crs = 4674)
 
+occ_sf
+
+ggplot() +
+  geom_sf(data = occ_sf)
 
 ## Shapefile da Mata Atlântica ----
 
