@@ -209,7 +209,7 @@ ggsave(filename = "mapa_distribuicao_riqueza.png",
 
 ## Shannon-Wiener ----
 
-## Calculando a riqueza ----
+## Calculando a diversidade ----
 
 shannon <- comp_occ |>
   tibble::column_to_rownames("ID") |>
@@ -217,14 +217,14 @@ shannon <- comp_occ |>
 
 shannon
 
-## Gerando um dataframe com os dados de riqueza ----
+## Gerando um dataframe com os dados de Shannon-Winner ----
 
 df_shannon <- tibble::tibble(ID = comp_occ$ID,
                              `Shannon-Winner` = shannon)
 
 df_shannon
 
-## Adicionando uma coluna no shapefile de grade com as informações de riqueza ----
+## Adicionando uma coluna no shapefile de grade com as informações de Shannon-Winner ----
 
 grade %<>%
   dplyr::left_join(df_shannon,
@@ -265,7 +265,7 @@ ggsave(filename = "mapa_distribuicao_shannon_winner.png",
 
 ## Gini-Simpson ----
 
-## Calculando a riqueza ----
+## Calculando a Gini-Simpson ----
 
 simpson <- comp_occ |>
   tibble::column_to_rownames("ID") |>
@@ -273,14 +273,14 @@ simpson <- comp_occ |>
 
 simpson
 
-## Gerando um dataframe com os dados de riqueza ----
+## Gerando um dataframe com os dados de Gini-Simpson ----
 
 df_simpson <- tibble::tibble(ID = comp_occ$ID,
                              `Gini-Simpson` = simpson)
 
 df_simpson
 
-## Adicionando uma coluna no shapefile de grade com as informações de riqueza ----
+## Adicionando uma coluna no shapefile de grade com as informações de Gini-Simpson ----
 
 grade %<>%
   dplyr::left_join(df_simpson,
@@ -321,7 +321,7 @@ ggsave(filename = "mapa_distribuicao_gini_simpson.png",
 
 ## Índices de Hill ----
 
-## Calculando a riqueza ----
+## Calculando a Hill ----
 
 hill <- comp_occ |>
   tibble::column_to_rownames("ID") |>
@@ -329,7 +329,7 @@ hill <- comp_occ |>
 
 hill
 
-## Gerando um dataframe com os dados de riqueza ----
+## Gerando um dataframe com os dados de Hill ----
 
 df_hill <- tibble::tibble(ID = comp_occ$ID,
                              `Q = 1` = hill$`1`,
@@ -337,7 +337,7 @@ df_hill <- tibble::tibble(ID = comp_occ$ID,
 
 df_hill
 
-## Adicionando uma coluna no shapefile de grade com as informações de riqueza ----
+## Adicionando uma coluna no shapefile de grade com as informações de Hill ----
 
 grade %<>%
   dplyr::left_join(df_hill,
@@ -388,6 +388,28 @@ ggsave(filename = "mapa_distribuicao_hill.png",
 # Distribuição dos valores de diversidade beta ----
 
 ## Sorensen ----
+
+### Calculando a diversidade beta ----
+
+sorensen <- comp_occ |>
+  tibble::column_to_rownames("ID") |>
+  vegan::decostand(method = "pa") |>
+  betapart::beta.pair() %>%
+  .$beta.sor |>
+  as.matrix() |>
+  as.data.frame() |>
+  rowMeans()
+
+sorensen
+
+### Gerando o dataframe com os valores ----
+
+df_sorensen <- tibble::tibble(ID = comp_occ$ID,
+                              Sorensen = sorensen)
+
+df_sorensen
+
+### Rasterizando ----
 
 ## Jaccard ----
 
