@@ -636,3 +636,61 @@ ggsave(filename = "mapa_distribuicao_especies_compartilhadas.png",
 
 ## Abundância compartilhada ----
 
+### Calculando a diversidade beta ----
+
+abud_comp <- comp_occ |>
+  tibble::column_to_rownames("ID") |>
+  betapart::betapart.core.abund() %>%
+  .$pair.shared.abund |>
+  as.matrix() |>
+  as.data.frame() |>
+  rowMeans()
+
+abud_comp
+
+### Gerando o dataframe com os valores ----
+
+df_abud_comp <- tibble::tibble(ID = comp_occ$ID,
+                               abud_comp = abud_comp)
+
+df_abud_comp
+
+### Adicionando uma coluna no shapefile de grade com as informações de Bray-Curtis ----
+
+grade %<>%
+  dplyr::left_join(df_abud_comp,
+                   by = "ID") %<>%
+  dplyr::mutate(abud_comp = dplyr::case_when(abud_comp |> is.na() ~ 0,
+                                             .default = abud_comp))
+
+grade
+
+### Rasterizando ----
+
+raster_abud_comp <- terra::rasterize(grade |> terra::vect(),
+                                     template,
+                                     field = "abud_comp")
+
+raster_abud_comp
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_abud_comp) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Abundância compartilhada média",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_abundancia_compartilhada.png",
+       height = 10, width = 12)
+
