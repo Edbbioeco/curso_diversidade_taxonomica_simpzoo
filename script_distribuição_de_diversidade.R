@@ -409,7 +409,45 @@ df_sorensen <- tibble::tibble(ID = comp_occ$ID,
 
 df_sorensen
 
-### Rasterizando ----
+## Adicionando uma coluna no shapefile de grade com as informações de Hill ----
+
+grade %<>%
+  dplyr::left_join(df_sorensen,
+                   by = "ID") %<>%
+  dplyr::mutate(Sorensen = dplyr::case_when(Sorensen |> is.na() ~ 0,
+                                           .default = Sorensen))
+
+grade
+
+## Rasterizando ----
+
+raster_soresen <- terra::rasterize(grade |> terra::vect(),
+                                   template,
+                                   field = "Sorensen")
+
+raster_soresen
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_soresen) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Índice de Dissimilaridade de Sorensen",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5),
+                       limits = c(0, 1)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_sorensen.png",
+       height = 10, width = 12)
 
 ## Jaccard ----
 
