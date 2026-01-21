@@ -129,12 +129,17 @@ ggplot() +
 
 # Montando as comunidades por grades ----
 
-occ_sf |>
+comp_occ <- occ_sf |>
   sf::st_join(grade) |>
   tidyr::drop_na() |>
   as.data.frame() |>
   dplyr::summarise(Abundancia = dplyr::n(),
-                   .by = c(ID, species))
+                   .by = c(ID, species)) |>
+  tidyr::pivot_wider(names_from = species,
+                     values_from = Abundancia,
+                     values_fill = 0)
+
+comp_occ
 
 # Distribuição dos valores de riqueza ----
 
