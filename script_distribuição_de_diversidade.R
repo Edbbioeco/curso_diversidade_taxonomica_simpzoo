@@ -153,9 +153,28 @@ template
 
 ## Calculando a riqueza ----
 
-comp_occ |>
+riqueza <- comp_occ |>
   tibble::column_to_rownames("ID") |>
   vegan::specnumber()
+
+riqueza
+
+## Gerando um dataframe com os dados de riqueza ----
+
+df_riqueza <- tibble::tibble(ID = comp_occ$ID,
+                             Riqueza = riqueza)
+
+df_riqueza
+
+## Adicionando uma coluna no shapefile de grade com as informações de riqueza ----
+
+grade %<>%
+  dplyr::left_join(df_riqueza,
+                   by = "ID")
+
+grade
+
+## Rasterizando ----
 
 # Distribuição dos valores de diversidade alfa ----
 
