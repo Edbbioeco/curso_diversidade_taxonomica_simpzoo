@@ -367,7 +367,7 @@ ggplot() +
   tidyterra::geom_spatraster(data = raster_hill) +
   facet_wrap(~lyr) +
   scale_fill_viridis_c(na.value = NA,
-                       guide = guide_colorbar(title = "Gini-Simpson",
+                       guide = guide_colorbar(title = "Índice de Hill",
                                               title.position = "top",
                                               title.hjust = 0.5,
                                               barheight = 0.5,
