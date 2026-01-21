@@ -171,7 +171,8 @@ df_riqueza
 grade %<>%
   dplyr::left_join(df_riqueza,
                    by = "ID") %<>%
-  tidyr::drop_na()
+  dplyr::mutate(Riqueza = dplyr::case_when(Riqueza |> is.na() ~ 0,
+                                           .default = Riqueza))
 
 grade
 
@@ -199,6 +200,9 @@ ggplot() +
                                               ticks.linewidth = 0.5)) +
   theme_classic() +
   theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_riqueza.png",
+       height = 10, width = 12)
 
 # Distribuição dos valores de diversidade alfa ----
 
