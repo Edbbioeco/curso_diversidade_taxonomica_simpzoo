@@ -184,6 +184,11 @@ raster_riqueza <- terra::rasterize(grade |> terra::vect(),
 
 raster_riqueza
 
+### Exportando ----
+
+raster_riqueza |> terra::writeRaster("raster_riqueza.tif",
+                                     overwrite = TRUE)
+
 ## Visualizando ----
 
 ggplot() +
@@ -242,6 +247,11 @@ raster_shannon <- terra::rasterize(grade |> terra::vect(),
 
 raster_shannon
 
+### Exportando ----
+
+raster_shannon |> terra::writeRaster("raster_shannon.tif",
+                                     overwrite = TRUE)
+
 ## Visualizando ----
 
 ggplot() +
@@ -297,6 +307,11 @@ raster_simpson <- terra::rasterize(grade |> terra::vect(),
                                    field = "Gini-Simpson")
 
 raster_simpson
+
+### Exportando ----
+
+raster_simpson |> terra::writeRaster("raster_simpson.tif",
+                                     overwrite = TRUE)
 
 ## Visualizando ----
 
@@ -362,6 +377,11 @@ raster_hill_q2 <- terra::rasterize(grade |> terra::vect(),
 raster_hill <- c(raster_hill_q1, raster_hill_q2)
 
 raster_hill
+
+### Exportando ----
+
+raster_hill |> terra::writeRaster("raster_hill.tif",
+                                  overwrite = TRUE)
 
 ## Visualizando ----
 
