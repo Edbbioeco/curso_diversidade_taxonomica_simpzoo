@@ -359,7 +359,7 @@ raster_hill_q2 <- terra::rasterize(grade |> terra::vect(),
                                       template,
                                       field = "Q = 2")
 
-raster_hill <- c(raster_simpson_q1, raster_simpson_q2)
+raster_hill <- c(raster_hill_q1, raster_hill_q2)
 
 raster_hill
 
@@ -427,6 +427,11 @@ raster_soresen <- terra::rasterize(grade |> terra::vect(),
 
 raster_soresen
 
+### Exportando ----
+
+raster_soresen |> terra::writeRaster("raster_sorensen.tif",
+                                     overwrite = TRUE)
+
 ### Visualizando ----
 
 ggplot() +
@@ -489,6 +494,11 @@ raster_jaccard <- terra::rasterize(grade |> terra::vect(),
 
 raster_jaccard
 
+### Exportando ----
+
+raster_jaccard |> terra::writeRaster("raster_jaccard.tif",
+                                     overwrite = TRUE)
+
 ### Visualizando ----
 
 ggplot() +
@@ -549,6 +559,11 @@ raster_bray <- terra::rasterize(grade |> terra::vect(),
                                 field = "Bray-Curtis")
 
 raster_bray
+
+### Exportando ----
+
+raster_bray |> terra::writeRaster("raster_bray-curtis.tif",
+                                  overwrite = TRUE)
 
 ## Visualizando ----
 
@@ -612,6 +627,11 @@ raster_sps_comp <- terra::rasterize(grade |> terra::vect(),
 
 raster_sps_comp
 
+### Exportando ----
+
+raster_sps_comp |> terra::writeRaster("raster_sps_comp.tif",
+                                      overwrite = TRUE)
+
 ## Visualizando ----
 
 ggplot() +
@@ -672,6 +692,11 @@ raster_abud_comp <- terra::rasterize(grade |> terra::vect(),
                                      field = "abud_comp")
 
 raster_abud_comp
+
+### Exportando ----
+
+raster_abud_comp |> terra::writeRaster("raster_abud_comp.tif",
+                                       overwrite = TRUE)
 
 ## Visualizando ----
 
