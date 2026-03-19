@@ -183,20 +183,26 @@ ggsave(filename = "diversidade_taxonomica_pielou.png",
 
 ## Números de Hill ----
 
+### Calculando ----
+
 hill <- com |> vegan::renyi(scales = 1:2, hill = TRUE)
 
 hill
 
-df_div <- tibble::tibble(Comunidade = com |> rownames(),
-                         hill) |>
+### Criando um dataframe dos dados ----
+
+df_div <- df_div |>
+  dplyr::bind_cols(hill) |>
   dplyr::rename("Q = 1" = `1`,
                 "Q = 2" = `2`)
 
 df_div
 
+### Gráfico ----
+
 df_div |>
   ggplot(aes(Comunidade, `Q = 1`)) +
-  geom_col(color = "black", fill = "black") +
+  geom_col(color = "black", fill = "gray50") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -206,7 +212,7 @@ ggsave(filename = "diversidade_taxonomica_hill_q1.png",
 
 df_div |>
   ggplot(aes(Comunidade, `Q = 2`)) +
-  geom_col(color = "black", fill = "black") +
+  geom_col(color = "black", fill = "gray50") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
