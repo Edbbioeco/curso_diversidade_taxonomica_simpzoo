@@ -75,6 +75,7 @@ chao1_trat |>
   scale_color_manual(values = c("royalblue", "orange")) +
   scale_fill_manual(values = c("royalblue", "orange")) +
   scale_x_continuous(breaks = seq(0, 14, 2)) +
+  scale_y_continuous(limits = c(1, 21)) +
   theme_classic()
 
 ggsave(filename = "rarefacao_chao1.png",
