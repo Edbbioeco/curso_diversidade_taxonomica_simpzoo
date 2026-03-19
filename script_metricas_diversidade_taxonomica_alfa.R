@@ -153,19 +153,25 @@ ggsave(filename = "diversidade_taxonomica_gini_simpson.png",
 
 ## Equitabilidade de Pielou ----
 
+### Calculando ----
+
 pielou <- shannon_wiener / log(riqueza)
 
-df_div <- tibble::tibble(Comunidade = com |> rownames(),
-                         Riqueza = riqueza,
-                         `Shannon-Wiener` = shannon_wiener,
-                         `Gini-Simpson` = gini_simpson,
-                         `Equitabilidade de Pielou` = pielou)
+pielou
+
+### Criando um dataframe dos dados ----
+
+df_div <- df_div |>
+  dplyr::mutate(`Equitabilidade de Pielou` = pielou)
 
 df_div
 
+# Gráfico ----
+
 df_div |>
   ggplot(aes(Comunidade, `Equitabilidade de Pielou`)) +
-  geom_col(color = "black", fill = "black") +
+  geom_col(color = "black", fill = "gray50") +
+  scale_y_continuous(limits = c(0, 1)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
