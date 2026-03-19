@@ -125,18 +125,25 @@ ggsave(filename = "diversidade_taxonomica_shannon_wienner.png",
 
 ## Gini-Simpson ----
 
+### Calculando ----
+
 gini_simpson <- com |> vegan::diversity(index = "simpson")
 
-df_div <- tibble::tibble(Comunidade = com |> rownames(),
-                         Riqueza = riqueza,
-                         `Shannon-Wiener` = shannon_wiener,
-                         `Gini-Simpson` = gini_simpson)
+gini_simpson
+
+### Criando um dataframe dos dados ----
+
+df_div <- df_div |>
+  dplyr::mutate(`Gini-Simpson` = gini_simpson)
 
 df_div
 
+### Gráfico ----
+
 df_div |>
   ggplot(aes(Comunidade, `Gini-Simpson`)) +
-  geom_col(color = "black", fill = "black") +
+  geom_col(color = "black", fill = "gray50") +
+  scale_y_continuous(limits = c(0, 1)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
