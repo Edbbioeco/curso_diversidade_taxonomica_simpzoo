@@ -98,17 +98,24 @@ ggsave(filename = "diversidade_taxonomica_riqueza.png",
 
 ## Shannon-Wiener ----
 
+### Calculando ----
+
 shannon_wiener <- com |> vegan::diversity()
 
-df_div <- tibble::tibble(Comunidade = com |> rownames(),
-                         Riqueza = riqueza,
-                         `Shannon-Wiener` = shannon_wiener)
+shannon_wiener
+
+### Criando um dataframe dos dados ----
+
+df_div <- df_div |>
+  dplyr::mutate(`Shannon-Wiener` = shannon_wiener)
 
 df_div
 
+### Gráfico ----
+
 df_div |>
   ggplot(aes(Comunidade, `Shannon-Wiener`)) +
-  geom_col(color = "black", fill = "black") +
+  geom_col(color = "black", fill = "gray50") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
