@@ -84,11 +84,11 @@ df_div <- tibble::tibble(Comunidade = com |> rownames(),
 
 df_div
 
-### Gráfico ----r
+### Gráfico ----
 
 df_div |>
   ggplot(aes(Comunidade, Riqueza)) +
-  geom_col(color = "black", fill = "black") +
+  geom_col(color = "black", fill = "gray50") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
