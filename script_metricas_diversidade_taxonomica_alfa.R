@@ -71,12 +71,20 @@ ggsave(filename = "diversidade_taxonomica_whittaker.png",
 
 ## Riqueza ----
 
+### Calculando ----
+
 riqueza <- com |> vegan::specnumber()
+
+riqueza
+
+### Criando um dataframe dos dados ----
 
 df_div <- tibble::tibble(Comunidade = com |> rownames(),
                          Riqueza = riqueza)
 
 df_div
+
+### Gráfico ----r
 
 df_div |>
   ggplot(aes(Comunidade, Riqueza)) +
