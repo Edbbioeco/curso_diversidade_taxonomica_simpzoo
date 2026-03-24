@@ -523,6 +523,35 @@ ggplot() +
 ggsave(filename = "mapa_distribuicao_hill.png",
        height = 10, width = 12)
 
+### Excluindo grades com Shannon-Wiener = 0 ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_hill |>
+                               tidyterra::filter(`Q = 1` > 0 & `Q = 2` > 0)) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Índice de Hill",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_hill_sem_0.png",
+       height = 10, width = 12)
+
 # Distribuição dos valores de diversidade beta ----
 
 ## Sorensen ----
