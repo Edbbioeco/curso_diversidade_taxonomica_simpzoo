@@ -226,7 +226,13 @@ ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_riqueza |>
                                tidyterra::filter(Riqueza > 0)) +
-  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Riqueza",
                                               title.position = "top",
