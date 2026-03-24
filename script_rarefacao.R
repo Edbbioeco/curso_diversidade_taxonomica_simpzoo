@@ -254,3 +254,4 @@ int_ext_amostras |>
 ggsave(filename = "rarefacao_int_ext_amostras.png",
        height = 10,
        width = 12)
+
