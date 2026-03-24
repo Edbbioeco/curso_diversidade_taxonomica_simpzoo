@@ -268,7 +268,7 @@ int_ext_hillq1 |>
   iNEXT::ggiNEXT(type = 1) +
   scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
   scale_colour_manual(values = "orange") +
-  scale_fill_manual(values = "orange") +
+  scale_y_continuous(limits = c(1, 17)) +
   labs(x = "Unidades amostrais", y = "Q = 1") +
   theme_classic()
 
@@ -298,6 +298,7 @@ int_ext_hillq2 |>
   scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
   scale_colour_manual(values = "orange") +
   scale_fill_manual(values = "orange") +
+  scale_y_continuous(limits = c(1, 13)) +
   labs(x = "Unidades amostrais", y = "Q = 2") +
   theme_classic()
 
