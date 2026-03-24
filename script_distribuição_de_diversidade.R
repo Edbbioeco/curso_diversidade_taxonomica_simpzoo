@@ -191,6 +191,8 @@ raster_riqueza |> terra::writeRaster("raster_riqueza.tif",
 
 ## Visualizando ----
 
+raster_riqueza
+
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_riqueza) +
