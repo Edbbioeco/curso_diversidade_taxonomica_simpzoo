@@ -499,6 +499,12 @@ ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_hill) +
   geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
   facet_wrap(~lyr) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Índice de Hill",
