@@ -198,7 +198,7 @@ raster_riqueza
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_riqueza) +
-  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Riqueza",
                                               title.position = "top",
@@ -233,7 +233,7 @@ ggplot() +
   theme_classic() +
   theme(legend.position = "bottom")
 
-ggsave(filename = "mapa_distribuicao_riqueza.png",
+ggsave(filename = "mapa_distribuicao_riqueza_sem_0.png",
        height = 10, width = 12)
 
 # Distribuição dos valores de diversidade alfa ----
