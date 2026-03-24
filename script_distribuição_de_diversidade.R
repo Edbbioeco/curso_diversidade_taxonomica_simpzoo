@@ -105,7 +105,7 @@ ggplot() +
 
 ## Escolhando a resolução ----
 
-res_grade <- (25 * 1) / 111.3194
+res_grade <- (50* 1) / 111.3194
 
 res_grade
 
@@ -604,7 +604,13 @@ raster_soresen |> terra::writeRaster("raster_sorensen.tif",
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_soresen) +
-  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Índice de Dissimilaridade de Sorensen",
                                               title.position = "top",
