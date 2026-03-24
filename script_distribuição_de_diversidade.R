@@ -894,7 +894,13 @@ raster_abud_comp |> terra::writeRaster("raster_abud_comp.tif",
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_abud_comp) +
-  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Abundância compartilhada média",
                                               title.position = "top",
@@ -909,4 +915,3 @@ ggplot() +
 
 ggsave(filename = "mapa_distribuicao_abundancia_compartilhada.png",
        height = 10, width = 12)
-
