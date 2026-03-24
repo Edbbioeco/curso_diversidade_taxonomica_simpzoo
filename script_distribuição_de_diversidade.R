@@ -495,6 +495,8 @@ raster_hill |> terra::writeRaster("raster_hill.tif",
 
 ## Visualizando ----
 
+### Valores totais ----
+
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_hill) +
