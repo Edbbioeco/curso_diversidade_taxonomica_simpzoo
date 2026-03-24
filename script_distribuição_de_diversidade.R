@@ -677,7 +677,13 @@ raster_jaccard |> terra::writeRaster("raster_jaccard.tif",
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_jaccard) +
-  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Índice de Dissimilaridade de Jaccard",
                                               title.position = "top",
@@ -743,7 +749,13 @@ raster_bray |> terra::writeRaster("raster_bray-curtis.tif",
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_bray) +
-  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Índice de Dissimilaridade de Bray-Curtis",
                                               title.position = "top",
