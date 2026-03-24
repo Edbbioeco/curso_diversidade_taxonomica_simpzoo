@@ -319,6 +319,34 @@ ggplot() +
 ggsave(filename = "mapa_distribuicao_shannon_winner.png",
        height = 10, width = 12)
 
+### Excluindo grades com Shannon-Wiener = 0 ----
+
+ggplot() +
+  geom_sf(data = br, color = "black") +
+  tidyterra::geom_spatraster(data = raster_riqueza |>
+                               tidyterra::filter(Riqueza > 0)) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
+  scale_fill_viridis_c(na.value = NA,
+                       guide = guide_colorbar(title = "Riqueza",
+                                              title.position = "top",
+                                              title.hjust = 0.5,
+                                              barheight = 0.5,
+                                              barwidth = 15,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              ticks.linewidth = 0.5)) +
+  theme_classic() +
+  theme(legend.position = "bottom")
+
+ggsave(filename = "mapa_distribuicao_riqueza_sem_0.png",
+       height = 10, width = 12)
+
 ## Gini-Simpson ----
 
 ## Calculando a Gini-Simpson ----
