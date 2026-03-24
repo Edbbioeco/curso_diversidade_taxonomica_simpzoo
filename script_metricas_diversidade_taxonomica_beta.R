@@ -445,5 +445,3 @@ df_compartilhadas_abu |>
 
 ggsave(filename = "diversidade_taxonomica_beta_abundancia_compartilhada.png",
        height = 10, width = 12)
-
-### Gráfico ----
