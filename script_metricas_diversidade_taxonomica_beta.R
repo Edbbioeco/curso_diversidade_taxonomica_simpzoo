@@ -320,7 +320,7 @@ df_bray |>
        y = NULL) +
   scale_fill_viridis_c(guide = guide_colorbar(title.position = "top",
                                               title.hjust = 0.5,
-                                              barwidth = 20,
+                                              barwidth = 25,
                                               frame.colour = "black",
                                               ticks.colour = "black",
                                               ticks.linewidth = 1),
