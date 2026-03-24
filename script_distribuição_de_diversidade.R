@@ -323,8 +323,8 @@ ggsave(filename = "mapa_distribuicao_shannon_winner.png",
 
 ggplot() +
   geom_sf(data = br, color = "black") +
-  tidyterra::geom_spatraster(data = raster_riqueza |>
-                               tidyterra::filter(Riqueza > 0)) +
+  tidyterra::geom_spatraster(data = raster_shannon |>
+                               tidyterra::filter(`Shannon-Winner` > 0)) +
   geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
   geom_sf(data = grade |>
             sf::st_union() |>
@@ -344,7 +344,7 @@ ggplot() +
   theme_classic() +
   theme(legend.position = "bottom")
 
-ggsave(filename = "mapa_distribuicao_riqueza_sem_0.png",
+ggsave(filename = "mapa_distribuicao_shannon_winner_sem_0.png",
        height = 10, width = 12)
 
 ## Gini-Simpson ----
@@ -389,10 +389,18 @@ raster_simpson |> terra::writeRaster("raster_simpson.tif",
 
 ## Visualizando ----
 
+### Valores totais ----
+
 ggplot() +
   geom_sf(data = br, color = "black") +
   tidyterra::geom_spatraster(data = raster_simpson) +
-  geom_sf(data = br, color = "black", fill = NA, linewidth = 0.5) +
+  geom_sf(data = br, color = "black", fill = NA, linewidth = 1) +
+  geom_sf(data = grade |>
+            sf::st_union() |>
+            sf::st_boundary(),
+          color = "forestgreen",
+          fill = "transparent",
+          linewidth = 1) +
   scale_fill_viridis_c(na.value = NA,
                        guide = guide_colorbar(title = "Gini-Simpson",
                                               title.position = "top",
