@@ -191,6 +191,8 @@ raster_riqueza |> terra::writeRaster("raster_riqueza.tif",
 
 ## Visualizando ----
 
+### Valores totais ----
+
 raster_riqueza
 
 ggplot() +
