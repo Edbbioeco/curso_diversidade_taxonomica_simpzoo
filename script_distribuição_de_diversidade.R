@@ -105,7 +105,7 @@ ggplot() +
 
 ## Escolhando a resolução ----
 
-res_grade <- (50 * 1) / 111.3194
+res_grade <- (25 * 1) / 111.3194
 
 res_grade
 
