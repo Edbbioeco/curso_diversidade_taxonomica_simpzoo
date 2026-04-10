@@ -21,3 +21,5 @@ if(require(c("tidyverse",
                      "devtools"))
 
 }
+
+devtools::install_github("Edbbioeco/ordenaR")
