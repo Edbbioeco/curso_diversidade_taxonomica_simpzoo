@@ -1,10 +1,3 @@
-# Instalando os pacotes ----
-
-install.packages(c("tidyverse",
-                   "scales",
-                   "vegan",
-                   "iNEXT"))
-
 # Carregando os pacotes ----
 
 library(tidyverse)
