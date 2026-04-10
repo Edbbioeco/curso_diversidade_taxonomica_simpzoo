@@ -1,12 +1,3 @@
-# Instalando pacotes ----
-
-install.packages(c("tidyverse",
-                   "betapart",
-                   "reshape2",
-                   "devtools"))
-
-devtools::install_github("Edbbioeco/ordenaR")
-
 # Carregando pacotes ----
 
 library(tidyverse)
